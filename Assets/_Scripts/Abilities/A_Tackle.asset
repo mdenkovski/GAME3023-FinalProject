@@ -23,3 +23,6 @@ MonoBehaviour:
   enemyBuff: 000000000000000000000000
   enemyDebuff: 000000000000000000000000
   LoveHealMultiplier: 0
+  particleSystem: {fileID: 8672378297549103354, guid: 6c5472dadb1b177469a8e7d8e11f658a, type: 3}
+  target: 0
+  clip: {fileID: 0}

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8672378297549103355}
   - component: {fileID: 4892753806815644910}
   m_Layer: 0
-  m_Name: Explosion Particles
+  m_Name: Tackle Particles 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -747,7 +747,7 @@ ParticleSystem:
     sphericalDirectionAmount: 0
     randomPositionAmount: 0
     radius:
-      value: 3.31
+      value: 1.78
       mode: 0
       spread: 0
       speed:
