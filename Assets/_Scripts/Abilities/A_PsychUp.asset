@@ -16,8 +16,10 @@ MonoBehaviour:
   abilityName: Psych UP
   attackMultiplier: 0
   description: Raise Attack by 2 step
+  percentChance: 1
   costHP: 0
   selfBuff: 020000000000000000000000
   selfDebuff: 000000000000000000000000
   enemyBuff: 000000000000000000000000
   enemyDebuff: 000000000000000000000000
+  LoveHealMultiplier: 0

@@ -16,8 +16,10 @@ MonoBehaviour:
   abilityName: Cuss Out
   attackMultiplier: 0
   description: Raise your Defence and Lower the opponents Love and Defence.
+  percentChance: 1
   costHP: 0
   selfBuff: 000000000100000000000000
   selfDebuff: 000000000000000000000000
   enemyBuff: 000000000000000000000000
   enemyDebuff: 000000000100000001000000
+  LoveHealMultiplier: 0

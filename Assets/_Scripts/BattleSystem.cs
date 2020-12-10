@@ -103,30 +103,41 @@ public class BattleSystem : MonoBehaviour
         Ability move = attacker.waifu.MyAbilties.abilityList[ability];
         dialogueText.text = attacker.waifu.CharacterName + " uses " + move.AbilityName+ "!";
         yield return new WaitForSeconds(1);
-        defenderDefeated = defender.TakeDamage((int)(attacker.waifu.Attack * move.AttackMultipier * (1.0f+0.05f*attacker.buffs[(int)BUFF_ARRAY.ATTACK]) ) );
-        attackerDefeated = attacker.Recoil((int)(move.CostHp));
-       
-        // buffs and debuffs
-        attacker.buffs[(int)BUFF_ARRAY.ATTACK]   = move.SelfBuff  [(int)BUFF_ARRAY.ATTACK];
-        attacker.buffs[(int)BUFF_ARRAY.DEFENCE]  = move.SelfBuff  [(int)BUFF_ARRAY.DEFENCE];
-        attacker.buffs[(int)BUFF_ARRAY.LOVE]     = move.SelfBuff  [(int)BUFF_ARRAY.LOVE];
-        attacker.buffs[(int)BUFF_ARRAY.ATTACK]  -= move.SelfDebuff[(int)BUFF_ARRAY.ATTACK];
-        attacker.buffs[(int)BUFF_ARRAY.DEFENCE] -= move.SelfDebuff[(int)BUFF_ARRAY.DEFENCE];
-        attacker.buffs[(int)BUFF_ARRAY.LOVE]    -= move.SelfDebuff[(int)BUFF_ARRAY.LOVE];
 
-        defender.buffs[(int)BUFF_ARRAY.ATTACK]   = move.SelfBuff  [(int)BUFF_ARRAY.ATTACK];
-        defender.buffs[(int)BUFF_ARRAY.DEFENCE]  = move.SelfBuff  [(int)BUFF_ARRAY.DEFENCE];
-        defender.buffs[(int)BUFF_ARRAY.LOVE]     = move.SelfBuff  [(int)BUFF_ARRAY.LOVE];
-        defender.buffs[(int)BUFF_ARRAY.ATTACK]  -= move.SelfDebuff[(int)BUFF_ARRAY.ATTACK];
-        defender.buffs[(int)BUFF_ARRAY.DEFENCE] -= move.SelfDebuff[(int)BUFF_ARRAY.DEFENCE];
-        defender.buffs[(int)BUFF_ARRAY.LOVE]    -= move.SelfDebuff[(int)BUFF_ARRAY.LOVE];
+        float hitChance = UnityEngine.Random.Range(0, 1);
 
-        dialogueText.text = move.Description;
-        yield return new WaitForSeconds(1);
+        if (hitChance > move.PercentChance)
+        {
+            dialogueText.text = attacker.waifu.CharacterName + " missed " + move.AbilityName + "!";
+            yield return new WaitForSeconds(1);
+        }
+        else
+        {
+
+            defenderDefeated = defender.TakeDamage((int)(attacker.waifu.Attack * move.AttackMultipier * (1.0f + 0.05f * attacker.buffs[(int)BUFF_ARRAY.ATTACK])));
+            attackerDefeated = attacker.Recoil((int)(move.CostHp));
+
+            // buffs and debuffs
+            attacker.buffs[(int)BUFF_ARRAY.ATTACK] = move.SelfBuff[(int)BUFF_ARRAY.ATTACK];
+            attacker.buffs[(int)BUFF_ARRAY.DEFENCE] = move.SelfBuff[(int)BUFF_ARRAY.DEFENCE];
+            attacker.buffs[(int)BUFF_ARRAY.LOVE] = move.SelfBuff[(int)BUFF_ARRAY.LOVE];
+            attacker.buffs[(int)BUFF_ARRAY.ATTACK] -= move.SelfDebuff[(int)BUFF_ARRAY.ATTACK];
+            attacker.buffs[(int)BUFF_ARRAY.DEFENCE] -= move.SelfDebuff[(int)BUFF_ARRAY.DEFENCE];
+            attacker.buffs[(int)BUFF_ARRAY.LOVE] -= move.SelfDebuff[(int)BUFF_ARRAY.LOVE];
+
+            defender.buffs[(int)BUFF_ARRAY.ATTACK] = move.SelfBuff[(int)BUFF_ARRAY.ATTACK];
+            defender.buffs[(int)BUFF_ARRAY.DEFENCE] = move.SelfBuff[(int)BUFF_ARRAY.DEFENCE];
+            defender.buffs[(int)BUFF_ARRAY.LOVE] = move.SelfBuff[(int)BUFF_ARRAY.LOVE];
+            defender.buffs[(int)BUFF_ARRAY.ATTACK] -= move.SelfDebuff[(int)BUFF_ARRAY.ATTACK];
+            defender.buffs[(int)BUFF_ARRAY.DEFENCE] -= move.SelfDebuff[(int)BUFF_ARRAY.DEFENCE];
+            defender.buffs[(int)BUFF_ARRAY.LOVE] -= move.SelfDebuff[(int)BUFF_ARRAY.LOVE];
+
+            dialogueText.text = move.Description;
+            yield return new WaitForSeconds(1);
 
 
-        attacker.Rest((int)(attacker.waifu.Love * move.LoveMultiplier* (1.0f + 0.05f * attacker.buffs[(int)BUFF_ARRAY.LOVE])));
-
+            attacker.Rest((int)(attacker.waifu.Love * move.LoveMultiplier * (1.0f + 0.05f * attacker.buffs[(int)BUFF_ARRAY.LOVE])));
+        }
         UpdateCharactersUI();
 
         yield return new WaitForSeconds(2);
@@ -206,8 +217,11 @@ public class BattleSystem : MonoBehaviour
         dialogueText.text = enemyDetails.waifu.CharacterName + " attacks!";
 
         yield return new WaitForSeconds(1.0f);
-
-        int move = (int)UnityEngine.Random.Range(0, 5);
+        int move = 4;
+        if (((float)enemyDetails.Health / (float)enemyDetails.waifu.HealthMax) > 0.25)
+        {
+            move = (int)UnityEngine.Random.Range(0, 4);
+        }
 
         StartCoroutine(Attack(move, enemyDetails, playerDetails));
 

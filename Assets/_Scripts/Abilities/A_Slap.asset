@@ -16,4 +16,10 @@ MonoBehaviour:
   abilityName: Slap
   attackMultiplier: 1
   description: Deals damage based on your attack.
+  percentChance: 1
   costHP: 0
+  selfBuff: 000000000000000000000000
+  selfDebuff: 000000000000000000000000
+  enemyBuff: 000000000000000000000000
+  enemyDebuff: 000000000000000000000000
+  LoveHealMultiplier: 0

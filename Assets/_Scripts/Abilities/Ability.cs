@@ -26,8 +26,10 @@ public class Ability : ScriptableObject
     private string description = "This is a move";
 
     [SerializeField]
-    private int costHP;
+    private float percentChance;
 
+    [SerializeField]
+    private int costHP;    
 
     [SerializeField]
     private int[] selfBuff = new int[3];
@@ -65,6 +67,11 @@ public class Ability : ScriptableObject
         get { return description; }
     }
 
+    public float PercentChance
+    {
+        get { return percentChance; }
+    }
+
     public int CostHp
     {
         get { return costHP; }
@@ -94,6 +101,7 @@ public class Ability : ScriptableObject
     {
         get { return LoveHealMultiplier; }
     }
+
 }
 
 
