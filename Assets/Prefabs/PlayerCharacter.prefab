@@ -233,6 +233,7 @@ GameObject:
   - component: {fileID: 5148704522927739456}
   - component: {fileID: 5148704522927739487}
   - component: {fileID: 5148704522927739486}
+  - component: {fileID: 4631771518362473712}
   m_Layer: 0
   m_Name: PlayerCharacter
   m_TagString: Player
@@ -370,13 +371,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 10
   rigidBody: {fileID: 5148704522927739460}
-  encounterChance: 15
-  groundCheckTransform: {fileID: 5148704523668875850}
-  EncounterLayer:
-    serializedVersion: 2
-    m_Bits: 256
-  encnounterCheckFrequency: 0.5
-  battleTransitionManager: {fileID: 5148704522927739486}
 --- !u!95 &5148704522927739456
 Animator:
   serializedVersion: 3
@@ -431,6 +425,26 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   battleExitDelay: 3
+--- !u!114 &4631771518362473712
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5148704522927739462}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36d899c9556529c4c8bae822e863a0ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  encounterChance: 15
+  groundCheckTransform: {fileID: 5148704523668875850}
+  rigidBody: {fileID: 5148704522927739460}
+  EncounterLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  encnounterCheckFrequency: 0.5
+  battleTransitionManager: {fileID: 5148704522927739486}
 --- !u!1 &5148704522928042087
 GameObject:
   m_ObjectHideFlags: 0
