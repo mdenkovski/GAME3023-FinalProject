@@ -25,4 +25,4 @@ MonoBehaviour:
   LoveHealMultiplier: 5
   particleSystem: {fileID: 8672378297549103354, guid: 1cd01e63133eff3438dd6644a299aace, type: 3}
   target: 1
-  clip: {fileID: 0}
+  clip: {fileID: 8300000, guid: 86021c3ff30c6f444a396874b77aae4e, type: 3}
