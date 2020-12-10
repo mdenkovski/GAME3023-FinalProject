@@ -2854,7 +2854,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1668362793}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0311499716a01846b1e27813fd7d724, type: 3}
+  m_Script: {fileID: 11500000, guid: 25e1f6518cf224643bbb8e24905d8c51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &1668362796
@@ -2901,8 +2901,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1668362795}
-        m_TargetAssemblyTypeName: PlayButtonBehaviour, Assembly-CSharp
-        m_MethodName: OnPlayButtonPressed
+        m_TargetAssemblyTypeName: ReturnToGameScript, Assembly-CSharp
+        m_MethodName: OnReturnButtonPressed
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

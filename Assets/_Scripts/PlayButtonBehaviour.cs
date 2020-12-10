@@ -7,6 +7,6 @@ public class PlayButtonBehaviour : MonoBehaviour
 {
    public void OnPlayButtonPressed()
     {
-        SpawnPoint.player.GetComponent<BattleTransitionManager>().ExitEncounter();
+        SceneManager.LoadScene("City");
     }
 }
