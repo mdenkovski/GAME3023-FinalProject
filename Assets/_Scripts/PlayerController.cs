@@ -20,7 +20,7 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         SavePositionButtonBehaviour.OnSave.AddListener(OnSave);
-        LoadPosition();
+        LoadSaveData();
         DontDestroyOnLoad(gameObject);
     }
 
@@ -53,7 +53,7 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-    void LoadPosition()
+    public void LoadSaveData()
     {
         string loadedData = PlayerPrefs.GetString(gameObject.name + "Position", "");
         Debug.Log("Loaded position: " + loadedData);

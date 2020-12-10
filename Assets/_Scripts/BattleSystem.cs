@@ -104,7 +104,7 @@ public class BattleSystem : MonoBehaviour
         dialogueText.text = attacker.waifu.CharacterName + " uses " + move.AbilityName+ "!";
         yield return new WaitForSeconds(1);
 
-        float hitChance = UnityEngine.Random.Range(0, 1);
+        float hitChance = UnityEngine.Random.Range(0.0f, 1.0f);
 
         if (hitChance > move.PercentChance)
         {
@@ -201,13 +201,21 @@ public class BattleSystem : MonoBehaviour
         if (state == BattleState.WIN)
         {
             dialogueText.text = "You won the battle!";
+            SpawnPoint.player.GetComponent<BattleTransitionManager>().ExitEncounter();
 
         }
         else if (state == BattleState.LOOSE)
         {
             dialogueText.text = "You lost the battle!";
-
+            PlayerLost();
         }
+    }
+
+    void PlayerLost()
+    {
+        SpawnPoint.player.GetComponent<PlayerController>().LoadSaveData();
+
+        SpawnPoint.player.GetComponent<BattleTransitionManager>().ExitEncounter();
     }
 
     IEnumerator EnemyTurn()
