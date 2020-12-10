@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7300391372607767277}
   - component: {fileID: 7300391372607767276}
   m_Layer: 0
-  m_Name: Waifu_02
+  m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -126,6 +126,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: efcaa0141cd011d44a3ea41a78b26eeb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  health: 0
   waifu: {fileID: 0}
+  buffs: 000000000000000000000000
   waifuSprite: {fileID: 7300391372607767276}
-  masterAbilityList: {fileID: 11400000, guid: ca305f31d483b8c418d85f96011f39b6, type: 2}

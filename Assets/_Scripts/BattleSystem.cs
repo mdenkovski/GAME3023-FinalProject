@@ -18,22 +18,30 @@ public class BattleSystem : MonoBehaviour
 {
     //knows the state of the current game
     public BattleState state;
+    [Header("Characters Loading In")]
     //which characters to instantiate
     public GameObject playerCharacter;
     public GameObject enemyCharacter;
 
     public WaifuMasterList Waifus;
 
+    [Header("Our Characters")]
     //details of our charatcer
     WaifuDetails playerDetails;
     WaifuDetails enemyDetails;
 
+    [Header("User Interface")]
     public TextMeshProUGUI dialogueText;
 
     // the UI panels for the respective characters
     public DetailsUI playerDetailsUI;
     public DetailsUI enemyDetailsUI;
     public TextMeshProUGUI[] abilitiesButtons;
+
+    [Header("AudioEffect")]
+    [SerializeField]
+    AudioSource audioSource;
+
 
     public 
 
@@ -137,6 +145,12 @@ public class BattleSystem : MonoBehaviour
 
 
             attacker.Rest((int)(attacker.waifu.Love * move.LoveMultiplier * (1.0f + 0.05f * attacker.buffs[(int)BUFF_ARRAY.LOVE])));
+
+            //play ability effects
+            move.PlayEffects(attacker.transform, defender.transform);
+            audioSource.clip = move.Clip ;
+            audioSource.Play();
+
         }
         UpdateCharactersUI();
 

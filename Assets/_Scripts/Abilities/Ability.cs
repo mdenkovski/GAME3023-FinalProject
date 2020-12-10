@@ -10,6 +10,12 @@ enum BUFF_ARRAY
     COUNT
 }
 
+enum TargetedPlayer
+{
+    SELF,
+    ENEMY
+}
+
 [CreateAssetMenu(fileName = "Ability", menuName = "ScriptableObjects/Ability", order = 1)]
 public class Ability : ScriptableObject
 {
@@ -45,6 +51,17 @@ public class Ability : ScriptableObject
 
     [SerializeField]
     private float LoveHealMultiplier;
+
+    [Header("ParticleSystem")]
+    [SerializeField]
+    ParticleSystem particleSystem;
+
+    [SerializeField]
+    TargetedPlayer target;
+
+    [Header("AudioEffect")]
+    [SerializeField]
+    AudioClip clip;
 
     public int AbilityId
     {
@@ -101,6 +118,22 @@ public class Ability : ScriptableObject
     {
         get { return LoveHealMultiplier; }
     }
+
+    public AudioClip Clip
+    {
+        get { return clip; }
+    }
+
+    public void PlayEffects(Transform attacker, Transform defender)
+    {
+        if (particleSystem != null)
+        {
+            var system = Instantiate(particleSystem, target == TargetedPlayer.SELF ? attacker.Find("Sprite").transform : defender.Find("Sprite").transform);
+            
+        }
+    }
+
+    
 
 }
 
