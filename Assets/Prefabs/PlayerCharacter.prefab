@@ -371,6 +371,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 10
   rigidBody: {fileID: 5148704522927739460}
+  Abilities:
+  - {fileID: 11400000, guid: d1d40c63cb197a341acd6cc200467241, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 11400000, guid: 18b4abecc218bbf4abaa7a0f5a77148f, type: 2}
+  MasterAbilityList: {fileID: 11400000, guid: ca305f31d483b8c418d85f96011f39b6, type: 2}
 --- !u!95 &5148704522927739456
 Animator:
   serializedVersion: 3

@@ -21,6 +21,7 @@ public class PlayerController : MonoBehaviour
     {
         SavePositionButtonBehaviour.OnSave.AddListener(OnSave);
         LoadPosition();
+        DontDestroyOnLoad(gameObject);
     }
 
 
