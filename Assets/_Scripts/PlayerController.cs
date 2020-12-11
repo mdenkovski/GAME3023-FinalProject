@@ -65,9 +65,10 @@ public class PlayerController : MonoBehaviour
             //Debug.Log("position string split");
             transform.position = new Vector3(float.Parse(splitData[0]), float.Parse(splitData[1]), float.Parse(splitData[2]));
         }
+        int loadedInt = PlayerPrefs.GetInt(gameObject.name + "Ability" + i);
         for (int i = 0; i < 5; i++)
         {
-            int loadedInt = PlayerPrefs.GetInt(gameObject.name + "Ability" + i);
+            loadedInt = PlayerPrefs.GetInt(gameObject.name + "Ability" + i);
             //Debug.Log(i + "Ability Loaded: " + loadedInt);
             if (loadedInt != -1)
             {
@@ -83,5 +84,10 @@ public class PlayerController : MonoBehaviour
     public Ability GetAbility(int id)
     {
         return Abilities[id];
+    }
+
+    public void SetAbility(int id, Ability newAbility)
+    {
+        Abilities[id] = newAbility;
     }
 }

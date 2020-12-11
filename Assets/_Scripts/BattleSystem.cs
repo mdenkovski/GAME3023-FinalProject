@@ -285,8 +285,8 @@ public class BattleSystem : MonoBehaviour
             bool duplicate = false;
             for (int i = 0; i < 4; i++)
             {
-                if (playerDetails.waifu.MyAbilties.abilityList[i] != null)
-                    if (playerDetails.waifu.MyAbilties.abilityList[i].AbilityName == MasterAbilityList.abilityList[randomMove].AbilityName)
+                if (playerController.GetAbility(i) != null)
+                    if (playerController.GetAbility(i).AbilityName == MasterAbilityList.abilityList[randomMove].AbilityName)
                     {
                         duplicate = true;
                     }
@@ -296,22 +296,23 @@ public class BattleSystem : MonoBehaviour
                 for (int i = 0; i < 4; i++)
                 {
                     if (givenAbility == false)
-                        if (playerDetails.waifu.MyAbilties.abilityList[i] == null)
+                        if (playerController.GetAbility(i) == null)
                         {
-                            playerDetails.waifu.MyAbilties.abilityList[i] = MasterAbilityList.abilityList[randomMove];
+                            playerController.SetAbility(i, MasterAbilityList.abilityList[randomMove]);
                             givenAbility = true;
                         }
                 }
                 if (givenAbility == false)
                 {
-                    playerDetails.waifu.MyAbilties.abilityList[UnityEngine.Random.Range(1, 4)] = MasterAbilityList.abilityList[randomMove];
+                    playerController.SetAbility(UnityEngine.Random.Range(1, 4), MasterAbilityList.abilityList[randomMove]);
+                    //playerDetails.waifu.MyAbilties.abilityList[UnityEngine.Random.Range(1, 4)] = MasterAbilityList.abilityList[randomMove];
                     givenAbility = true;
                 }
             }
         }
     }
 
-    
+
 
     IEnumerator EnemyTurn()
     {
