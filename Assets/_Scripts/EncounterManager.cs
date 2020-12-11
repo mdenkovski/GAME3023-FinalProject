@@ -20,6 +20,8 @@ public class EncounterManager : MonoBehaviour
     [SerializeField]
     float encnounterCheckFrequency;
 
+    float encounterDetectionRadius = 0.3f;
+
     [Header("BattleTransition")]
     [SerializeField]
     BattleTransitionManager battleTransitionManager;
@@ -34,7 +36,7 @@ public class EncounterManager : MonoBehaviour
     {
         if (rigidBody.velocity.magnitude >= 0.1f)
         {
-            Collider2D collision = Physics2D.OverlapCircle(groundCheckTransform.position, 0.2f, EncounterLayer);
+            Collider2D collision = Physics2D.OverlapCircle(groundCheckTransform.position, encounterDetectionRadius, EncounterLayer);
 
             if (collision)
             {
@@ -55,6 +57,6 @@ public class EncounterManager : MonoBehaviour
     {
         Gizmos.color = Color.white;
 
-        Gizmos.DrawWireSphere(groundCheckTransform.position, 0.2f);
+        Gizmos.DrawWireSphere(groundCheckTransform.position, encounterDetectionRadius);
     }
 }
