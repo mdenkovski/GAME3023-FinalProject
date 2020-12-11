@@ -12,13 +12,18 @@ public class MusicManager : MonoBehaviour
     [SerializeField]
     AudioSource musicSource;
 
+    [Range(0,1)]
+    [SerializeField]
+    float startingVolume;
+
     [SerializeField]
     AudioClip[] trackList;
 
     [SerializeField]
     float transitionDuration = 3.0f;
 
-    IEnumerator FadingTrack = null;
+    IEnumerator FadingInTrack = null;
+    IEnumerator FadingOutAndInTrack = null;
 
     public enum Track
     {
@@ -26,16 +31,23 @@ public class MusicManager : MonoBehaviour
         City
     }
 
+    private void Start()
+    {
+        var transitionManager = SpawnPoint.player.GetComponent<BattleTransitionManager>();
+        transitionManager.onEnterEncounter.AddListener(FadeOutMusic);
+        transitionManager.onExitEncounter.AddListener(FadeOutMusic);
 
+        FadeInStartingMusic();
+    }
     public void OnCityEnterHandler()
     {
         //PlayTrack(Track.City);
-        FadeInTrackOverSeconds(Track.City, transitionDuration);
+        FadeOutAndInTrack(Track.City, transitionDuration);
     }
 
     public void OnCityExitHandler()
     {
-        FadeInTrackOverSeconds(Track.Field, transitionDuration);
+        FadeOutAndInTrack(Track.Field, transitionDuration);
     }
 
     public void PlayTrack(MusicManager.Track trackID)
@@ -48,14 +60,14 @@ public class MusicManager : MonoBehaviour
     {
 
         //if coroutine is running
-        if (FadingTrack != null)
+        if (FadingInTrack != null)
         {
-            StopCoroutine(FadingTrack);
+            StopCoroutine(FadingInTrack);
         }
         musicSource.clip = trackList[(int)trackID];
         musicSource.Play();
-        FadingTrack = FadeInOverSecondsCoroutine(duration);
-        StartCoroutine(FadingTrack);
+        FadingInTrack = FadeInOverSecondsCoroutine(duration);
+        StartCoroutine(FadingInTrack);
 
     }
 
@@ -76,5 +88,91 @@ public class MusicManager : MonoBehaviour
         }
     }
 
+    public void FadeOutAndInTrack(MusicManager.Track trackID, float duration)
+    {
+        //if coroutine is running
+        if (FadingOutAndInTrack != null)
+        {
+            StopCoroutine(FadingOutAndInTrack);
+        }
+        FadingOutAndInTrack = FadeOutAndInOverSecondsCoroutine(trackID, duration);
+        StartCoroutine(FadingOutAndInTrack);
+    }
 
+    IEnumerator FadeOutAndInOverSecondsCoroutine(MusicManager.Track trackID, float duration)
+    {
+        var initialVolume = musicSource.volume;
+        float timer = 0.0f;
+        while (timer < duration)
+        {
+            timer += Time.deltaTime;
+            float normalizedTime = timer / duration;
+
+            musicSource.volume = Mathf.SmoothStep(initialVolume, 0, normalizedTime); ;
+            //fade volume
+            yield return new WaitForEndOfFrame();
+
+        }
+
+        FadeInTrackOverSeconds(trackID, duration);
+    }
+
+    void FadeOutMusic()
+    {
+        StartCoroutine(FadeOutOverSecondsCoroutine(1.0f));
+    }
+
+    IEnumerator FadeOutOverSecondsCoroutine(float duration)
+    {
+        var initialVolume = musicSource.volume;
+
+        float timer = 0.0f;
+        while (timer < duration)
+        {
+            timer += Time.deltaTime;
+            float normalizedTime = timer / duration;
+
+            musicSource.volume = Mathf.SmoothStep(initialVolume, 0, normalizedTime); ;
+            //fade volume
+            yield return new WaitForEndOfFrame();
+
+        }
+
+    }
+
+    void FadeInStartingMusic()
+    {
+        StartCoroutine(FadeInStartOverSecondsCoroutine(2.0f));
+    }
+
+    IEnumerator FadeInStartOverSecondsCoroutine(float duration)
+    {
+        musicSource.volume = 0.0f;
+
+        float timer = 0.0f;
+        while (timer < duration)
+        {
+            timer += Time.deltaTime;
+            float normalizedTime = timer / duration;
+
+            musicSource.volume = Mathf.SmoothStep(0, startingVolume, normalizedTime); ;
+            //fade volume
+            yield return new WaitForEndOfFrame();
+
+        }
+
+    }
+
+
+    private void OnDestroy()
+    {
+        var transitionManager = SpawnPoint.player.GetComponent<BattleTransitionManager>();
+        if(transitionManager)
+        {
+            transitionManager.onEnterEncounter.RemoveListener(FadeOutMusic);
+            transitionManager.onExitEncounter.RemoveListener(FadeOutMusic);
+
+        }
+        
+    }
 }

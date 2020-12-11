@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f43ee66b09c27b458410b5d6539d464, type: 3}
   m_Name: m_CussOut
   m_EditorClassIdentifier: 
-  abilityID: 3
+  abilityID: 0
   abilityName: Cuss Out
   attackMultiplier: 0
   description: Raise your Defence and Lower the opponents Love and Defence.
@@ -23,6 +23,6 @@ MonoBehaviour:
   enemyBuff: 000000000000000000000000
   enemyDebuff: 000000000100000001000000
   LoveHealMultiplier: 0
-  particleSystem: {fileID: 0}
-  target: 0
-  clip: {fileID: 0}
+  particleSystem: {fileID: 8940003361575197267, guid: 57ab54ae8dfcc7e40acc2f57f0e22fba, type: 3}
+  target: 1
+  clip: {fileID: 8300000, guid: caced3f417db7d743b73244c2118bb2d, type: 3}

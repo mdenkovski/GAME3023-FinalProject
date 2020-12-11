@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f43ee66b09c27b458410b5d6539d464, type: 3}
   m_Name: A_Rest
   m_EditorClassIdentifier: 
-  abilityID: 8
+  abilityID: 0
   abilityName: Rest
   attackMultiplier: 0
   description: Resting will restore some health based on your love.
@@ -25,4 +25,4 @@ MonoBehaviour:
   LoveHealMultiplier: 1
   particleSystem: {fileID: 0}
   target: 0
-  clip: {fileID: 0}
+  clip: {fileID: 8300000, guid: dc557507bd9725d4fb36bc33d07f63ec, type: 3}

@@ -158,8 +158,11 @@ public class BattleSystem : MonoBehaviour
 
             //play ability effects
             move.PlayEffects(attacker.transform, defender.transform);
-            audioSource.clip = move.Clip ;
-            audioSource.Play();
+            if (move.Clip != null)
+            {
+                audioSource.clip = move.Clip;
+                audioSource.Play();
+            }
 
         }
         UpdateCharactersUI();
