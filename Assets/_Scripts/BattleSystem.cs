@@ -58,8 +58,8 @@ public class BattleSystem : MonoBehaviour
     void Start()
     {
         state = BattleState.START;
-        StartCoroutine(CreatePlayers());
         playerController = SpawnPoint.player.GetComponent<PlayerController>();
+        StartCoroutine(CreatePlayers());
     }
 
     //a corutine to allow for us to have delays
@@ -120,7 +120,14 @@ public class BattleSystem : MonoBehaviour
     {
         for (int i = 0; i < 5; i++)
         {
-            abilitiesButtons[i].text = playerDetails.waifu.MyAbilties.abilityList[i].AbilityName;
+            if (playerAbilities[i] == null)
+            {
+                abilitiesButtons[i].transform.parent.gameObject.SetActive(false);
+            }
+            else
+            {
+                abilitiesButtons[i].text = playerAbilities[i].AbilityName;
+            }
         }
         
     }
@@ -129,7 +136,8 @@ public class BattleSystem : MonoBehaviour
     {
         bool defenderDefeated = false;
         bool attackerDefeated = false;
-        Ability move = attacker.waifu.MyAbilties.abilityList[ability];
+        //if player 1 use player abilities if not use the preset abilities for enemy
+        Ability move = (state == BattleState.PLAYER1 ?  playerAbilities[ability]: attacker.waifu.MyAbilties.abilityList[ability]);
         dialogueText.text = attacker.waifu.CharacterName + " uses " + move.AbilityName+ "!";
         yield return new WaitForSeconds(1);
 
