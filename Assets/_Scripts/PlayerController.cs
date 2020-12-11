@@ -65,19 +65,23 @@ public class PlayerController : MonoBehaviour
             //Debug.Log("position string split");
             transform.position = new Vector3(float.Parse(splitData[0]), float.Parse(splitData[1]), float.Parse(splitData[2]));
         }
-        int loadedInt = PlayerPrefs.GetInt(gameObject.name + "Ability" + i);
+        //int loadedInt = PlayerPrefs.GetInt(gameObject.name + "Ability" + 0);
         for (int i = 0; i < 5; i++)
         {
-            loadedInt = PlayerPrefs.GetInt(gameObject.name + "Ability" + i);
+            int loadedInt = PlayerPrefs.GetInt(gameObject.name + "Ability" + i, -2);
             //Debug.Log(i + "Ability Loaded: " + loadedInt);
-            if (loadedInt != -1)
-            {
-                Abilities[i] = MasterAbilityList.abilityList[loadedInt];
-            }
-            else
+            if (loadedInt == -1)
             {
                 Abilities[i] = null;
             }
+            else if (loadedInt >= 0)
+            {
+                Abilities[i] = MasterAbilityList.abilityList[loadedInt];
+            }
+            //else // -2 means new gamefile no saved prefs
+            //{
+                
+            //}
         }
     }
 

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f43ee66b09c27b458410b5d6539d464, type: 3}
   m_Name: A_Struggle
   m_EditorClassIdentifier: 
-  abilityID: 0
+  abilityID: 6
   abilityName: Struggle
   attackMultiplier: 5000
   description: 33% chance to knocking the opponent out
