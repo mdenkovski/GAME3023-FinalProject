@@ -137,7 +137,7 @@ public class BattleSystem : MonoBehaviour
         bool defenderDefeated = false;
         bool attackerDefeated = false;
         //if player 1 use player abilities if not use the preset abilities for enemy
-        Ability move = (state == BattleState.PLAYER1 ?  playerAbilities[ability]: attacker.waifu.MyAbilties.abilityList[ability]);
+        Ability move = (attacker == playerDetails ?  playerAbilities[ability]: attacker.waifu.MyAbilties.abilityList[ability]);
         dialogueText.text = attacker.waifu.CharacterName + " uses " + move.AbilityName+ "!";
         yield return new WaitForSeconds(1);
 
