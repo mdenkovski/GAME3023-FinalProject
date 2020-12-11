@@ -166,13 +166,17 @@ public class MusicManager : MonoBehaviour
 
     private void OnDestroy()
     {
-        var transitionManager = SpawnPoint.player.GetComponent<BattleTransitionManager>();
-        if(transitionManager)
+        if(SpawnPoint.player != null)
         {
-            transitionManager.onEnterEncounter.RemoveListener(FadeOutMusic);
-            transitionManager.onExitEncounter.RemoveListener(FadeOutMusic);
+            var transitionManager = SpawnPoint.player.GetComponent<BattleTransitionManager>();
+            if (transitionManager)
+            {
+                transitionManager.onEnterEncounter.RemoveListener(FadeOutMusic);
+                transitionManager.onExitEncounter.RemoveListener(FadeOutMusic);
 
+            }
         }
+       
         
     }
 }

@@ -36,6 +36,7 @@ public class EncounterManager : MonoBehaviour
     {
         if (rigidBody.velocity.magnitude >= 0.1f)
         {
+            
             Collider2D collision = Physics2D.OverlapCircle(groundCheckTransform.position, encounterDetectionRadius, EncounterLayer);
 
             if (collision)

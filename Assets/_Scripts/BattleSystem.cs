@@ -45,7 +45,11 @@ public class BattleSystem : MonoBehaviour
     [SerializeField]
     AudioSource audioSource;
 
-    
+    [SerializeField]
+    private PlayerController playerController;
+
+    [SerializeField]
+    private List<Ability> playerAbilities;
 
     public 
 
@@ -55,6 +59,7 @@ public class BattleSystem : MonoBehaviour
     {
         state = BattleState.START;
         StartCoroutine(CreatePlayers());
+        playerController = SpawnPoint.player.GetComponent<PlayerController>();
     }
 
     //a corutine to allow for us to have delays
@@ -84,6 +89,18 @@ public class BattleSystem : MonoBehaviour
         playerDetails.waifu = Waifus.waifuList[0];
         playerDetails.waifuSprite.sprite = playerDetails.waifu.characterImage;
         playerDetails.Health = playerDetails.waifu.HealthMax;
+
+        OverideAbilities();
+    }
+
+    void OverideAbilities()
+    {
+        for (int i = 0; i < 5; i++)
+        {
+
+            playerAbilities.Add(playerController.GetAbility(i));
+        }
+
     }
 
     void CreateEnemy()

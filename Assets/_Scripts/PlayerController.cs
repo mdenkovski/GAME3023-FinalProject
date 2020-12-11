@@ -62,13 +62,13 @@ public class PlayerController : MonoBehaviour
         {
             char[] delimiters = new char[] { ',' };
             string[] splitData = loadedData.Split(delimiters);
-            Debug.Log("position string split");
+            //Debug.Log("position string split");
             transform.position = new Vector3(float.Parse(splitData[0]), float.Parse(splitData[1]), float.Parse(splitData[2]));
         }
         for (int i = 0; i < 5; i++)
         {
             int loadedInt = PlayerPrefs.GetInt(gameObject.name + "Ability" + i);
-            Debug.Log(i + "Ability Loaded: " + loadedInt);
+            //Debug.Log(i + "Ability Loaded: " + loadedInt);
             if (loadedInt != -1)
             {
                 Abilities[i] = MasterAbilityList.abilityList[loadedInt];
@@ -78,5 +78,10 @@ public class PlayerController : MonoBehaviour
                 Abilities[i] = null;
             }
         }
+    }
+
+    public Ability GetAbility(int id)
+    {
+        return Abilities[id];
     }
 }
