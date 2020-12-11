@@ -125,7 +125,7 @@ public class BattleSystem : MonoBehaviour
         }
         else
         {
-            if (move.AbilityId == 0)
+            if (move.AbilityName == "Escape")
             {
                 dialogueText.text = attacker.waifu.CharacterName + " managed to " + move.AbilityName + "!";
 
@@ -261,7 +261,7 @@ public class BattleSystem : MonoBehaviour
             for (int i = 0; i < 4; i++)
             {
                 if (playerDetails.waifu.MyAbilties.abilityList[i] != null)
-                    if (playerDetails.waifu.MyAbilties.abilityList[i].AbilityId == MasterAbilityList.abilityList[randomMove].AbilityId)
+                    if (playerDetails.waifu.MyAbilties.abilityList[i].AbilityName == MasterAbilityList.abilityList[randomMove].AbilityName)
                     {
                         duplicate = true;
                     }

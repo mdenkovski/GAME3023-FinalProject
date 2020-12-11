@@ -20,7 +20,7 @@ public class EncounterManager : MonoBehaviour
     [SerializeField]
     float encnounterCheckFrequency;
 
-    float encounterDetectionRadius = 0.3f;
+    float encounterDetectionRadius = 0.75f;
 
     [Header("BattleTransition")]
     [SerializeField]
@@ -41,7 +41,7 @@ public class EncounterManager : MonoBehaviour
             if (collision)
             {
                 float roll = Random.Range(0.0f, 100.0f);
-                //Debug.Log("Rolled a: " + roll);
+                Debug.Log("Rolled a: " + roll);
                 if (roll <= encounterChance)
                 {
                     battleTransitionManager.EnterEncounter();
