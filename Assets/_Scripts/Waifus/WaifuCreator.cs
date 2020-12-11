@@ -23,6 +23,13 @@ public class WaifuCreator : ScriptableObject
     // love dictates how much they will recover with the rest action
     [SerializeField]
     private int love;
+    // Aggressiveness make it more likely they are to attack even at lower health percentages. 
+    // A value of 0 means neutral not more likely or less likely.
+    // This value dictates how they think their health percentage is.
+    // A 1 in this means they think of their health as double to what it is when determining a course of action.
+    [SerializeField]
+    private float aggressiveness;
+
 
     [SerializeField]
     private AbilityList myAbilities;
@@ -51,6 +58,11 @@ public class WaifuCreator : ScriptableObject
     public int Love
     {
         get { return love; }
+    }
+
+    public float Aggressiveness
+    {
+        get { return aggressiveness; }
     }
 
     public AbilityList MyAbilties

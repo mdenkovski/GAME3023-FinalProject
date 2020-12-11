@@ -16,6 +16,9 @@ public enum BattleState {
 
 public class BattleSystem : MonoBehaviour
 {
+    [SerializeField]
+    public AbilityList MasterAbilityList;
+
     //knows the state of the current game
     public BattleState state;
     [Header("Characters Loading In")]
@@ -42,6 +45,7 @@ public class BattleSystem : MonoBehaviour
     [SerializeField]
     AudioSource audioSource;
 
+    
 
     public 
 
@@ -116,12 +120,18 @@ public class BattleSystem : MonoBehaviour
 
         if (hitChance > move.PercentChance)
         {
-            dialogueText.text = attacker.waifu.CharacterName + " missed " + move.AbilityName + "!";
+            dialogueText.text = attacker.waifu.CharacterName + " failed to use " + move.AbilityName + "!";
             yield return new WaitForSeconds(1);
         }
         else
         {
+            if (move.AbilityId == 0)
+            {
+                dialogueText.text = attacker.waifu.CharacterName + " managed to " + move.AbilityName + "!";
 
+                Debug.Log("Escaped!");
+                Escape();
+            }    
             defenderDefeated = defender.TakeDamage((int)(attacker.waifu.Attack * move.AttackMultipier * (1.0f + 0.05f * attacker.buffs[(int)BUFF_ARRAY.ATTACK])));
             attackerDefeated = attacker.Recoil((int)(move.CostHp));
 
@@ -156,17 +166,17 @@ public class BattleSystem : MonoBehaviour
 
         yield return new WaitForSeconds(2);
 
-        if (CheckPlayerWin())
-        {
-            state = BattleState.WIN;
-            EndBattle();
-        }
         if (CheckEnemyWin())
         {
             state = BattleState.LOOSE;
             EndBattle();
         }
-
+        if (CheckPlayerWin())
+        {
+            state = BattleState.WIN;
+            EndBattle();
+        }
+        
 
         if (state == BattleState.PLAYER2)
         {
@@ -214,9 +224,9 @@ public class BattleSystem : MonoBehaviour
     {
         if (state == BattleState.WIN)
         {
-            dialogueText.text = "You won the battle!";
-            SpawnPoint.player.GetComponent<BattleTransitionManager>().ExitEncounter();
+            GrantPlayerNewAbility();
 
+            SpawnPoint.player.GetComponent<BattleTransitionManager>().ExitEncounter();
         }
         else if (state == BattleState.LOOSE)
         {
@@ -224,13 +234,56 @@ public class BattleSystem : MonoBehaviour
             PlayerLost();
         }
     }
-
     void PlayerLost()
     {
         SpawnPoint.player.GetComponent<PlayerController>().LoadSaveData();
 
         SpawnPoint.player.GetComponent<BattleTransitionManager>().ExitEncounter();
     }
+
+    void Escape()
+    {
+        SpawnPoint.player.GetComponent<BattleTransitionManager>().ExitEncounter();
+    }
+
+    void GrantPlayerNewAbility()
+    {
+        dialogueText.text = "You won the battle!";
+        bool givenAbility = false;
+
+        while (!givenAbility)
+        {
+            int randomMove = UnityEngine.Random.Range(1, MasterAbilityList.abilityList.Length);
+            bool duplicate = false;
+            for (int i = 0; i < 4; i++)
+            {
+                if (playerDetails.waifu.MyAbilties.abilityList[i] != null)
+                    if (playerDetails.waifu.MyAbilties.abilityList[i].AbilityId == MasterAbilityList.abilityList[randomMove].AbilityId)
+                    {
+                        duplicate = true;
+                    }
+            }
+            if (!duplicate)
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    if (givenAbility == false)
+                        if (playerDetails.waifu.MyAbilties.abilityList[i] == null)
+                        {
+                            playerDetails.waifu.MyAbilties.abilityList[i] = MasterAbilityList.abilityList[randomMove];
+                            givenAbility = true;
+                        }
+                }
+                if (givenAbility == false)
+                {
+                    playerDetails.waifu.MyAbilties.abilityList[UnityEngine.Random.Range(1, 4)] = MasterAbilityList.abilityList[randomMove];
+                    givenAbility = true;
+                }
+            }
+        }
+    }
+
+    
 
     IEnumerator EnemyTurn()
     {
@@ -240,10 +293,16 @@ public class BattleSystem : MonoBehaviour
 
         yield return new WaitForSeconds(1.0f);
         int move = 4;
-        if (((float)enemyDetails.Health / (float)enemyDetails.waifu.HealthMax) > 0.25)
+
+        float moveChance = UnityEngine.Random.Range(0.0f, 1.0f);
+        // if move chance is above the players health % then it will heal. This makes it more likely to heal the lower health it is.
+
+
+        if ((1+enemyDetails.waifu.Aggressiveness)*((float)enemyDetails.Health / (float)enemyDetails.waifu.HealthMax) > moveChance)
         {
             move = (int)UnityEngine.Random.Range(0, 4);
         }
+        Debug.Log("Enemy Move: " + move + " - " + enemyDetails.waifu.MyAbilties.abilityList[move].AbilityName);
 
         StartCoroutine(Attack(move, enemyDetails, playerDetails));
 
@@ -298,7 +357,6 @@ public class BattleSystem : MonoBehaviour
         buttonSound.Play();
         StartCoroutine(Attack(4, playerDetails, enemyDetails));
     }
-
-    
+     
 
 }
