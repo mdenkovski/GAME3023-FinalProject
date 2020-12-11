@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f43ee66b09c27b458410b5d6539d464, type: 3}
   m_Name: A_Taunt
   m_EditorClassIdentifier: 
-  abilityID: 0
+  abilityID: 7
   abilityName: Taunt
   attackMultiplier: 0
   description: Taunts opponent. Sharply lower their defence while raising their attack.
@@ -23,3 +23,6 @@ MonoBehaviour:
   enemyBuff: 010000000000000000000000
   enemyDebuff: 000000000300000000000000
   LoveHealMultiplier: 0
+  particleSystem: {fileID: 0}
+  target: 0
+  clip: {fileID: 0}
