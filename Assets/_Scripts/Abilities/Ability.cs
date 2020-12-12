@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// To keep track which buffs and debuffs affects which stat
+/// </summary>
 enum BUFF_ARRAY
 {
     ATTACK,
@@ -10,12 +13,18 @@ enum BUFF_ARRAY
     COUNT
 }
 
+/// <summary>
+/// Used for Particles to have them play on the correct target
+/// </summary>
 enum TargetedPlayer
 {
     SELF,
     ENEMY
 }
 
+/// <summary>
+/// Scriptable Object to store all the information about a particular ability.
+/// </summary>
 [CreateAssetMenu(fileName = "Ability", menuName = "ScriptableObjects/Ability", order = 1)]
 public class Ability : ScriptableObject
 {
@@ -124,6 +133,11 @@ public class Ability : ScriptableObject
         get { return clip; }
     }
 
+    /// <summary>
+    /// Instantiate a new particle system at target.
+    /// </summary>
+    /// <param name="attacker"></param>
+    /// <param name="defender"></param>
     public void PlayEffects(Transform attacker, Transform defender)
     {
         if (particleSystem != null)
