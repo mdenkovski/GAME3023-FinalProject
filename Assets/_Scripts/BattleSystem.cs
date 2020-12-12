@@ -13,7 +13,9 @@ public enum BattleState {
     PROCESSING
 }
 
-
+/// <summary>
+/// Controls the game flow and manages the turns and abilities
+/// </summary>
 public class BattleSystem : MonoBehaviour
 {
     [SerializeField]
@@ -45,9 +47,11 @@ public class BattleSystem : MonoBehaviour
     [SerializeField]
     AudioSource audioSource;
 
+    //player controller to get the abilities from it
     [SerializeField]
     private PlayerController playerController;
 
+    //store our player abilities
     [SerializeField]
     private List<Ability> playerAbilities;
 
@@ -57,18 +61,27 @@ public class BattleSystem : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //set up battle state
         state = BattleState.START;
+        //get the player controller from the player that was not destroyed on load in city scene
         playerController = SpawnPoint.player.GetComponent<PlayerController>();
+        //create the game players
         StartCoroutine(CreatePlayers());
     }
 
-    //a corutine to allow for us to have delays
+   /// <summary>
+   /// create the players in the battle scene
+   /// </summary>
+   /// <returns></returns>
     IEnumerator CreatePlayers()
     {
-
+        //create our player
         CreatePlayer();
+        //create enemy player
         CreateEnemy();
+        //update UI of halth and names
         UpdateCharactersUI();
+        //update the abilities selection UI
         UpdateAbilityUI();
 
         yield return new WaitForSeconds(3.0f);
@@ -80,19 +93,27 @@ public class BattleSystem : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// create the player character and set up the values
+    /// </summary>
     void CreatePlayer()
     {
         //instantiate player and get their detials
         GameObject player = Instantiate(playerCharacter);
         playerDetails = player.GetComponent<WaifuDetails>();
         //playerDetails.waifu = Waifus.waifuList[PlayerPrefs.GetInt("Player1")];
+        //transfer the specifications from the scriptable objects to our player
         playerDetails.waifu = Waifus.waifuList[0];
         playerDetails.waifuSprite.sprite = playerDetails.waifu.characterImage;
         playerDetails.Health = playerDetails.waifu.HealthMax;
 
+        //update our default abilities with our saved abilities
         OverideAbilities();
     }
 
+    /// <summary>
+    /// sets the characters abilities to the custom abilites that were saved
+    /// </summary>
     void OverideAbilities()
     {
         for (int i = 0; i < 5; i++)
@@ -103,12 +124,18 @@ public class BattleSystem : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Create the enemy player and their details
+    /// </summary>
+
     void CreateEnemy()
     {
         //nstantiate enemy and get their detials
         GameObject enemy = Instantiate(enemyCharacter);
         enemyDetails = enemy.GetComponent<WaifuDetails>();
         enemyDetails.waifu = Waifus.waifuList[UnityEngine.Random.Range(1, 4)];
+
+        //transfer the specifications from the scriptable objects to our enemy
         enemyDetails.waifuSprite.sprite = enemyDetails.waifu.characterImage;
         enemyDetails.Health = enemyDetails.waifu.HealthMax;
 
@@ -116,22 +143,37 @@ public class BattleSystem : MonoBehaviour
         dialogueText.text = "You face off against " + enemyDetails.waifu.CharacterName;
     }
 
+
+    /// <summary>
+    /// updates the UI for the ability menu
+    /// </summary>
     void UpdateAbilityUI()
     {
         for (int i = 0; i < 5; i++)
         {
+            //check if player ability is not valid to have
             if (playerAbilities[i] == null)
             {
+                //deactivate the button for the ability
                 abilitiesButtons[i].transform.parent.gameObject.SetActive(false);
             }
             else
             {
+                //override the ability
                 abilitiesButtons[i].text = playerAbilities[i].AbilityName;
             }
         }
         
     }
 
+
+    /// <summary>
+    /// Called when an attack occurs to process the attack effect
+    /// </summary>
+    /// <param name="ability"></param>
+    /// <param name="attacker"></param>
+    /// <param name="defender"></param>
+    /// <returns></returns>
     IEnumerator Attack (int ability, WaifuDetails attacker, WaifuDetails defender )
     {
         bool defenderDefeated = false;
@@ -141,21 +183,26 @@ public class BattleSystem : MonoBehaviour
         dialogueText.text = attacker.waifu.CharacterName + " uses " + move.AbilityName+ "!";
         yield return new WaitForSeconds(1);
 
+
+        //generate a hit chance for our roll
         float hitChance = UnityEngine.Random.Range(0.0f, 1.0f);
 
+        //check to see if the hit will succeed
         if (hitChance > move.PercentChance)
         {
+            //missed so update the text
             dialogueText.text = attacker.waifu.CharacterName + " failed to use " + move.AbilityName + "!";
             yield return new WaitForSeconds(1);
         }
-        else
+        else // ability hit succeeds
         {
+            //check if escaping
             if (move.AbilityName == "Escape")
             {
                 dialogueText.text = attacker.waifu.CharacterName + " managed to " + move.AbilityName + "!";
 
                 Debug.Log("Escaped!");
-                Escape();
+                Escape(); //return to the city scene
             }    
             defenderDefeated = defender.TakeDamage((int)(attacker.waifu.Attack * move.AttackMultipier * (1.0f + 0.05f * attacker.buffs[(int)BUFF_ARRAY.ATTACK])));
             attackerDefeated = attacker.Recoil((int)(move.CostHp));
@@ -178,7 +225,7 @@ public class BattleSystem : MonoBehaviour
             dialogueText.text = move.Description;
             yield return new WaitForSeconds(1);
 
-
+            //process healing
             attacker.Rest((int)(attacker.waifu.Love * move.LoveMultiplier * (1.0f + 0.05f * attacker.buffs[(int)BUFF_ARRAY.LOVE])));
 
             //play ability effects
@@ -190,10 +237,12 @@ public class BattleSystem : MonoBehaviour
             }
 
         }
+        //update ui elements
         UpdateCharactersUI();
 
         yield return new WaitForSeconds(2);
 
+        //check states
         if (CheckEnemyWin())
         {
             state = BattleState.LOOSE;
@@ -205,7 +254,7 @@ public class BattleSystem : MonoBehaviour
             EndBattle();
         }
         
-
+        //transition turns
         if (state == BattleState.PLAYER2)
         {
             state = BattleState.PLAYER1;
@@ -219,6 +268,10 @@ public class BattleSystem : MonoBehaviour
         
     }
 
+    /// <summary>
+    /// check if the player won
+    /// </summary>
+    /// <returns></returns>
     bool CheckPlayerWin()
     {
         /// return true if playerHasWon
@@ -227,6 +280,10 @@ public class BattleSystem : MonoBehaviour
         return false;
     }
 
+    /// <summary>
+    /// check if the player lost
+    /// </summary>
+    /// <returns></returns>
     bool CheckEnemyWin()
     {
         if (playerDetails.Health <= 0)
@@ -235,6 +292,10 @@ public class BattleSystem : MonoBehaviour
         }
         return false;
     }
+
+    /// <summary>
+    /// refresh the ui elements for the character details
+    /// </summary>
     void UpdateCharactersUI()
     {
         enemyDetailsUI.FillUI(enemyDetails);
@@ -242,16 +303,23 @@ public class BattleSystem : MonoBehaviour
 
     }
 
-
+    /// <summary>
+    /// request move dialogue
+    /// </summary>
     void Player1Turn()
     {
         dialogueText.text = "What would you like your waifu to do?";
     }
 
+    /// <summary>
+    /// end the battle and transitions to the city
+    /// </summary>
     void EndBattle()
     {
+        //check the result
         if (state == BattleState.WIN)
         {
+            //give new ability to player if they won
             GrantPlayerNewAbility();
 
             SpawnPoint.player.GetComponent<BattleTransitionManager>().ExitEncounter();
@@ -262,48 +330,63 @@ public class BattleSystem : MonoBehaviour
             PlayerLost();
         }
     }
+
+    /// <summary>
+    /// return to the city scene at the last save
+    /// </summary>
     void PlayerLost()
     {
+        //load the last save. important to do before exiting encounter
         SpawnPoint.player.GetComponent<PlayerController>().LoadSaveData();
 
         SpawnPoint.player.GetComponent<BattleTransitionManager>().ExitEncounter();
     }
 
+    /// <summary>
+    /// flee from the battle with no penalty
+    /// </summary>
     void Escape()
     {
         SpawnPoint.player.GetComponent<BattleTransitionManager>().ExitEncounter();
     }
 
+    /// <summary>
+    /// gives the player a new ability or replaces an existing one if full
+    /// </summary>
     void GrantPlayerNewAbility()
     {
         dialogueText.text = "You won the battle!";
         bool givenAbility = false;
 
+        //iterate check to grant the ability
         while (!givenAbility)
         {
+            //determine the random ability
             int randomMove = UnityEngine.Random.Range(1, MasterAbilityList.abilityList.Length);
             bool duplicate = false;
             for (int i = 0; i < 4; i++)
             {
+                //chek if the ability already exists on the player
                 if (playerController.GetAbility(i) != null)
                     if (playerController.GetAbility(i).AbilityName == MasterAbilityList.abilityList[randomMove].AbilityName)
                     {
                         duplicate = true;
                     }
             }
-            if (!duplicate)
+            if (!duplicate) //ability does not already exist
             {
                 for (int i = 0; i < 4; i++)
                 {
                     if (givenAbility == false)
-                        if (playerController.GetAbility(i) == null)
+                        if (playerController.GetAbility(i) == null) //check for the first empty ability
                         {
-                            playerController.SetAbility(i, MasterAbilityList.abilityList[randomMove]);
+                            playerController.SetAbility(i, MasterAbilityList.abilityList[randomMove]); //add the ability to the empty spot
                             givenAbility = true;
                         }
                 }
-                if (givenAbility == false)
+                if (givenAbility == false) //no empty ability
                 {
+                    //place the new ability in a random position - note it does not override the first and last ability per gameplay
                     playerController.SetAbility(UnityEngine.Random.Range(1, 4), MasterAbilityList.abilityList[randomMove]);
                     //playerDetails.waifu.MyAbilties.abilityList[UnityEngine.Random.Range(1, 4)] = MasterAbilityList.abilityList[randomMove];
                     givenAbility = true;
@@ -313,31 +396,37 @@ public class BattleSystem : MonoBehaviour
     }
 
 
-
+    /// <summary>
+    /// enemy turn enumerator
+    /// </summary>
+    /// <returns></returns>
     IEnumerator EnemyTurn()
     {
-        //put AI HERE
-
+        //update text
         dialogueText.text = enemyDetails.waifu.CharacterName + " attacks!";
 
         yield return new WaitForSeconds(1.0f);
-        int move = 4;
+        int move = 4; //set the move to rest by default
 
         float moveChance = UnityEngine.Random.Range(0.0f, 1.0f);
         // if move chance is above the players health % then it will heal. This makes it more likely to heal the lower health it is.
 
-
+        //determine what move the waifu will do based on their aggressiveness and remaining health percentage
         if ((1+enemyDetails.waifu.Aggressiveness)*((float)enemyDetails.Health / (float)enemyDetails.waifu.HealthMax) > moveChance)
         {
-            move = (int)UnityEngine.Random.Range(0, 4);
+            move = (int)UnityEngine.Random.Range(0, 4); // update the move if determined it will not heal
         }
         Debug.Log("Enemy Move: " + move + " - " + enemyDetails.waifu.MyAbilties.abilityList[move].AbilityName);
-
+        //trigger the enemy attack on their selected move
         StartCoroutine(Attack(move, enemyDetails, playerDetails));
 
         yield return new WaitForSeconds(1.0f);
     }
 
+    /// <summary>
+    /// player uses button 1
+    /// </summary>
+    /// <param name="buttonSound"></param>
     public void OnButtonAttack1(AudioSource buttonSound)
     {
         if (state != BattleState.PLAYER1)
@@ -349,6 +438,10 @@ public class BattleSystem : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// player uses button 2
+    /// </summary>
+    /// <param name="buttonSound"></param>
     public void OnButtonAttack2(AudioSource buttonSound)
     {
         if (state != BattleState.PLAYER1)
@@ -358,6 +451,10 @@ public class BattleSystem : MonoBehaviour
         StartCoroutine(Attack(1, playerDetails, enemyDetails));
     }
 
+    /// <summary>
+    /// player uses button 3
+    /// </summary>
+    /// <param name="buttonSound"></param>
     public void OnButtonAttack3(AudioSource buttonSound)
     {
         if (state != BattleState.PLAYER1)
@@ -368,6 +465,10 @@ public class BattleSystem : MonoBehaviour
         
     }
 
+    /// <summary>
+    /// player uses button 4
+    /// </summary>
+    /// <param name="buttonSound"></param>
     public void OnButtonGuardUp(AudioSource buttonSound)
     {
         if (state != BattleState.PLAYER1)
@@ -378,6 +479,11 @@ public class BattleSystem : MonoBehaviour
         
     }
 
+
+    /// <summary>
+    /// player uses button 5
+    /// </summary>
+    /// <param name="buttonSound"></param>
     public void OnButtonRest(AudioSource buttonSound)
     {
         if (state != BattleState.PLAYER1)
