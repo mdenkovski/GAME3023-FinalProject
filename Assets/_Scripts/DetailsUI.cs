@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-
+/// <summary>
+/// Handles UI to display correct information at all times
+/// </summary>
 public class DetailsUI : MonoBehaviour
 {
     public TextMeshProUGUI nameText;
