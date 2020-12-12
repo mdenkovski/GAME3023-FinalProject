@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Cleans Up Particles GameObjects after they have finished their lifetime.
+/// </summary>
 public class ParticleCleanup : MonoBehaviour
 {
     [SerializeField]

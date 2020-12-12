@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 
+/// <summary>
+/// Player Controller handles the players information and movement outside of battle.
+/// </summary>
 public class PlayerController : MonoBehaviour
 {
     [SerializeField]
@@ -24,7 +27,9 @@ public class PlayerController : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-
+    /// <summary>
+    /// Movement is done here
+    /// </summary>
     // Update is called once per frame
     void Update()
     {
@@ -35,7 +40,9 @@ public class PlayerController : MonoBehaviour
 
     }
 
-
+    /// <summary>
+    /// This saves the players current information. like position and current abilties to player prefs.
+    /// </summary>
     void OnSave()
     {
         string saveStr = "";
@@ -53,6 +60,9 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
+    /// <summary>
+    /// Loads Player Prefs and sets position and abilities where it was last time.
+    /// </summary>
     public void LoadSaveData()
     {
         string loadedData = PlayerPrefs.GetString(gameObject.name + "Position", "");
@@ -85,11 +95,22 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// used to get an abilties at index 'id'
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     public Ability GetAbility(int id)
     {
         return Abilities[id];
     }
 
+
+    /// <summary>
+    /// used to set ability at index 'id' to 'newAbiltiy'
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="newAbility"></param>
     public void SetAbility(int id, Ability newAbility)
     {
         Abilities[id] = newAbility;

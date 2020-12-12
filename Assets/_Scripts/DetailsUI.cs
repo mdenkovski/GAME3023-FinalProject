@@ -10,7 +10,10 @@ public class DetailsUI : MonoBehaviour
     public TextMeshProUGUI healthText;
     public Slider slider;
 
-
+    /// <summary>
+    /// Retrieves data from the details to fill in appropriate ui elements.
+    /// </summary>
+    /// <param name="details"></param>
     public void FillUI(WaifuDetails details)
     {
         WaifuCreator baseDetails = details.waifu; ;
@@ -26,6 +29,10 @@ public class DetailsUI : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Used to keep the BATTLE UI up-to-date on current health
+    /// </summary>
+    /// <param name="health"></param>
     public void UpdateHP(float health)
     {
         slider.value = health;

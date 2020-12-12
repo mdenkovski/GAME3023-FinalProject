@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-
+/// <summary>
+/// WaifuCreator is a Scriptable Object at holds the basic stats and framework for each Waifu
+/// </summary>
 [CreateAssetMenu(fileName = "Waifu", menuName = "ScriptableObjects/Waifu", order = 3)]
 public class WaifuCreator : ScriptableObject
 {
+
     public Sprite characterImage;
 
     [SerializeField]
@@ -30,7 +33,7 @@ public class WaifuCreator : ScriptableObject
     [SerializeField]
     private float aggressiveness;
 
-
+    // Abilities the Waifu will have
     [SerializeField]
     private AbilityList myAbilities;
 
