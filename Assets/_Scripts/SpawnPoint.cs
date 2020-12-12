@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+/// <summary>
+/// spawns in the player character and keeps reference to it
+/// </summary>
 public class SpawnPoint : MonoBehaviour
 {
     [SerializeField]
@@ -14,6 +18,7 @@ public class SpawnPoint : MonoBehaviour
     {
         if(player == null)
         {
+            //spawn the player and store him
             player = Instantiate(playerPrefab, transform.position, transform.rotation).GetComponent<PlayerController>();
         }
     }

@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-using UnityEngine.SceneManagement;
 
+
+/// <summary>
+/// balle button used in debugging to transition from city to battle. button is not enabled in actual game
+/// </summary>
 public class BattleButtonBehaviour : MonoBehaviour
 {
     public void OnBattleButtonPressed()

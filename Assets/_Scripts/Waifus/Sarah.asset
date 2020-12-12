@@ -16,7 +16,7 @@ MonoBehaviour:
   characterName: Sarah
   healthMax: 175
   defence: 50
-  attack: 10
+  attack: 30
   love: 15
   aggressiveness: 0
   myAbilities: {fileID: 11400000, guid: 25ad09a0675b0ad4ea81b2c7424860ee, type: 2}
